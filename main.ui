@@ -14,17 +14,14 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="CreateButton">
+   <widget class="QTableView" name="view">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>10</y>
-      <width>221</width>
-      <height>51</height>
+      <x>5</x>
+      <y>1</y>
+      <width>791</width>
+      <height>591</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Создать круг</string>
     </property>
    </widget>
   </widget>

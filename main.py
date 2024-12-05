@@ -1,37 +1,33 @@
 import sys
-from random import randint as rd
-from PyQt6.QtCore import QPoint
-from PyQt6.QtGui import QPainter, QColor
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt6.QtSql import QSqlDatabase, QSqlTableModel
+from PyQt6.QtWidgets import QMainWindow, QApplication, QTableWidgetItem
+from PyQt6 import uic
+import io
 
-
-class MainWind(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setGeometry(300, 300, 800, 600)
-        self.setWindowTitle('Рисование')
-        self.CreateButton = QPushButton("Создать круг", self)
-        self.CreateButton.resize(221, 51)
-        self.CreateButton.move(290, 10)
+with open("main.ui", "r", encoding="utf8") as f:
+    TEMPLATE = f.read()
 
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
 
 
-class Example(MainWind):
+class Example(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.CreateButton.clicked.connect(self.update)
+        uic.loadUi(io.StringIO(TEMPLATE), self)
 
-    def paintEvent(self, event):
-        qp = QPainter()
-        qp.begin(self)
-        color = QColor(rd(0, 255), rd(0, 255), rd(0, 255))
-        size = rd(10, 150)
-        qp.setBrush(color)
-        qp.drawEllipse(QPoint(400, 300), size, size)
-        qp.end()
+        db = QSqlDatabase.addDatabase('QSQLITE')
+        db.setDatabaseName('coffee.sqlite')
+        db.open()
+
+        model = QSqlTableModel(self, db)
+        model.setTable('Coffee')
+        model.select()
+
+        self.view.setModel(model)
+        self.view.move(10, 10)
+        self.view.resize(780, 580)
 
 
 if __name__ == '__main__':
