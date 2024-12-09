@@ -1,5 +1,7 @@
 import sys
 import sqlite3
+import class_main
+import class_second_form
 from PyQt6.QtSql import QSqlDatabase, QSqlTableModel
 from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget
 from PyQt6 import uic
@@ -9,10 +11,10 @@ def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
 
 
-class Example(QMainWindow):
+class Example(QMainWindow, class_main.Ui_MainWindow):
     def __init__(self, name):
         super().__init__()
-        uic.loadUi("main.ui", self)
+        self.setupUi(self)
         self.name = name
 
         self.show_table()
@@ -36,10 +38,10 @@ class Example(QMainWindow):
         self.SecForm.show()
 
 
-class SecondForm(QWidget):
+class SecondForm(QWidget, class_second_form.Ui_Form):
     def __init__(self, *args):
         super().__init__()
-        uic.loadUi("addEditCoffeeForm.ui", self)
+        self.setupUi(self)
         self.name = args[-1]
         self.OKButton.clicked.connect(self.add_value)
         self.OKButton.clicked.connect(args[-2])
@@ -66,7 +68,7 @@ class SecondForm(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example('coffee.sqlite')
+    ex = Example('data\\coffee.sqlite')
     ex.show()
     sys.excepthook = except_hook
     sys.exit(app.exec())
